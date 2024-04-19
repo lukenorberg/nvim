@@ -8,7 +8,7 @@ return {
         config = function()
             require("mason").setup()
             require("mason-lspconfig").setup({
-                ensure_installed = { "lua_ls", "tsserver", "pyright", "eslint", "sqls" }
+                ensure_installed = { "lua_ls", "tsserver", "pyright", "eslint", "sqls", "tailwindcss" }
             })
             local on_attach = function(client, bufnr)
                 vim.keymap.set('n', 'gD', vim.lsp.buf.declaration)
@@ -17,7 +17,7 @@ return {
                 vim.keymap.set('n', 'gi', vim.lsp.buf.implementation)
                 -- vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder)
                 vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition)
-                -- vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action)
+                vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action)
                 -- vim.keymap.set('n', 'gr', vim.lsp.buf.references)
                 vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename)
                 vim.api.nvim_buf_create_user_command(bufnr, "Format", function(_)
@@ -25,7 +25,7 @@ return {
 				end, { desc = "Format current buffer with LSP" })
 
             end
-            local capabilities = vim.lsp.protocol.make_client_capabilities()
+            local Capabilities = require('cmp_nvim_lsp').default_capabilities()
             require"lspconfig".lua_ls.setup{
                 on_attach = on_attach,
                 capabilities = capabilities,
@@ -39,6 +39,10 @@ return {
                 capabilities = capabilities,
             }
             require"lspconfig".sqls.setup{
+                on_attach = on_attach,
+                capabilities = capabilities,
+            }
+            require"lspconfig".tailwindcss.setup{
                 on_attach = on_attach,
                 capabilities = capabilities,
             }
