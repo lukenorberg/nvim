@@ -19,12 +19,15 @@ return {
                     expand = function(args)
                         require('luasnip').lsp_expand(args.body)
                     end
+                },
+                view = {
+
 
                 },
                 mapping = {
                    -- ["<C-d>"] = cmp.mapping.scroll_docs(-4),
                    -- ["<C-f>"] = cmp.mapping.scroll_docs(4),
-                    ["<leader>q"] = cmp.mapping.confirm {
+                    ["<CR>"] = cmp.mapping.confirm {
                       behavior = cmp.ConfirmBehavior.Insert,
                       select = true,
                     },
@@ -49,16 +52,17 @@ return {
                     end, { "i", "s" }),
                 },
                 sources = cmp.config.sources({
-                        { name = "nvim_lsp" },
+                        { name = "nvim_lsp", max_item_count = 3 },
                         { name = "nvim_lua" },
-                        { name = "luasnip" }, -- For luasnip users.
+                        { name = "luasnip", max_item_count = 3}, -- For luasnip users.
                     }, {
-                        { name = "buffer" },
+                        { name = "buffer", max_item_count = 3 },
                         { name = "path" },
                     }),
                 confirm_opts = {
                     behavior = cmp.ConfirmBehavior.Replace,
                     select = true,
+
                 },
             })
             cmp.setup.cmdline(":", {

@@ -10,22 +10,31 @@ return {
             local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 			null_ls.setup({
 				sources = {
-                    null_ls.builtins.formatting.prettier,
-                    require("none-ls.code_actions.eslint"),
+                    null_ls.builtins.formatting.prettier.with({
+                        extra_args = function(params)
+                            return params.options
+                                and params.options.tabSize
+                                and {
+                                    "--tab-width",
+                                    params.options.tabSize
+                                }
+                        end
+                    }),
+                    -- require("none-ls.diagnostics.eslint_d"),
 				},
-    on_attach = function(client, bufnr)
-        if client.supports_method("textDocument/formatting") then
-            vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-            vim.api.nvim_create_autocmd("BufWritePre", {
-                group = augroup,
-                buffer = bufnr,
-                callback = function()
-                    vim.lsp.buf.format({ async = false })
-                   -- vim.lsp.buf.formatting_sync()
+                on_attach = function(client, bufnr)
+                    if client.supports_method("textDocument/formatting") then
+                        vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+                        vim.api.nvim_create_autocmd("BufWritePre", {
+                            group = augroup,
+                            buffer = bufnr,
+                            callback = function()
+                                vim.lsp.buf.format({ async = false })
+                               -- vim.lsp.buf.formatting_sync()
+                            end,
+                        })
+                    end
                 end,
-            })
-        end
-    end,
 			})
 		end,
 	},
